@@ -2,6 +2,8 @@
 
 Android kotlin extension.
 
+* [Wiki](https://github.com/VerstSiu/kotlin_extension/wiki)
+
 ## License
 
 ```

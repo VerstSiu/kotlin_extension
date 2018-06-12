@@ -18,6 +18,7 @@ buildscript {
         depend_support_constraintLayout = 'com.android.support.constraint:constraint-layout:1.1.0'
 
         depend_kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+        depend_kotlin_reflect = "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
         depend_junit = 'junit:junit:4.12'
         depend_test_runner = 'com.android.support.test:runner:1.0.2'

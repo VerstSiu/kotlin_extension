@@ -33,6 +33,7 @@ dependencies {
 
     implementation project.depend_support_appCompatV7
     implementation project.depend_kotlin
+    implementation project.depend_kotlin_reflect
 
     implementation project(':ktx')
 }
