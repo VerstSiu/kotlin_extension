@@ -21,24 +21,28 @@ import android.os.Handler
 import android.os.Looper
 
 /**
- * Main handler.
- */
-private val mainHandler by lazy { Handler(Looper.getMainLooper()) }
-
-/**
- * Execute expected action at main thread.
+ * Asynchronous looper.
  *
- * @param action action.
- * @since 1.0
+ * @author verstsiu on 2018/6/15.
+ * @version 1.0
  */
-fun Looper.main(action: () -> Unit) {
-  mainHandler.post(action)
+object AsyncLooper {
+  /**
+   * Main thread handler.
+   *
+   * @since 1.0
+   */
+  @JvmStatic
+  val handler by lazy { Handler(Looper.getMainLooper()) }
+
+  /**
+   * Execute expected action at main thread.
+   *
+   * @param action action.
+   * @since 1.0
+   */
+  @JvmStatic
+  fun main(action: () -> Unit) {
+    handler.post(action)
+  }
 }
-
-/**
- * Main thread handler.
- *
- * @since 1.0
- */
-val Looper.handler: Handler
-  get() = mainHandler
