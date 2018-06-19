@@ -1,10 +1,9 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion project.compileSdkVersion
     defaultConfig {
-        applicationId "usecase.ijoic.ktx"
         minSdkVersion project.minSdkVersion
         targetSdkVersion project.targetSdkVersion
         versionCode project.versionCode
@@ -25,7 +24,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     testImplementation project.depend_junit
     androidTestImplementation project.depend_test_runner
@@ -33,8 +31,7 @@ dependencies {
 
     implementation project.depend_support_appCompatV7
     implementation project.depend_kotlin
-    implementation project.depend_kotlin_reflect
+    implementation project.depend_google_guava
 
     implementation project(':ktx')
-    implementation project(':ktx-guava')
 }
