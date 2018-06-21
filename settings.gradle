@@ -1,1 +1,1 @@
-include ':app', ':ktx', ':use_case', ':ktx-guava'
+include ':app', ':ktx', ':use_case', ':ktx-guava', ':ktx-rxjava'
