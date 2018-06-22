@@ -34,6 +34,17 @@ fun execute(scheduler: Scheduler, action: Runnable): Disposable {
 }
 
 /**
+ * Execute expected action.
+ *
+ * @param scheduler scheduler.
+ * @param action action.
+ * @return execute disposable.
+ */
+fun execute(scheduler: Scheduler, action: () -> Unit): Disposable {
+  return scheduler.scheduleDirect(action)
+}
+
+/**
  * Execute fromAction and deliver result to toAction.
  *
  * @param fromAction from action.
@@ -57,9 +68,25 @@ fun<T> execute(fromAction: () -> T, toAction: (T) -> Unit, from: Scheduler = Sch
 fun io(action: Runnable) = execute(Schedulers.io(), action)
 
 /**
+ * Execute expected action on io thread.
+ *
+ * @param action action.
+ * @return execute disposable.
+ */
+fun io(action: () -> Unit) = execute(Schedulers.io(), action)
+
+/**
  * Execute expected action on computation thread.
  *
  * @param action action.
  * @return execute disposable.
  */
 fun compute(action: Runnable) = execute(Schedulers.computation(), action)
+
+/**
+ * Execute expected action on computation thread.
+ *
+ * @param action action.
+ * @return execute disposable.
+ */
+fun compute(action: () -> Unit) = execute(Schedulers.computation(), action)
