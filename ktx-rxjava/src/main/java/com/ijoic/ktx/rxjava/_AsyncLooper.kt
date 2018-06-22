@@ -17,7 +17,6 @@
  */
 package com.ijoic.ktx.rxjava
 
-import com.ijoic.ktx.util.AsyncLooper
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -30,7 +29,7 @@ import io.reactivex.schedulers.Schedulers
  * @param action action.
  * @return execute disposable.
  */
-fun AsyncLooper.execute(scheduler: Scheduler, action: () -> Unit): Disposable {
+fun execute(scheduler: Scheduler, action: Runnable): Disposable {
   return scheduler.scheduleDirect(action)
 }
 
@@ -42,7 +41,7 @@ fun AsyncLooper.execute(scheduler: Scheduler, action: () -> Unit): Disposable {
  * @param from from scheduler.
  * @param to to scheduler.
  */
-fun<T> AsyncLooper.execute(fromAction: () -> T, toAction: (T) -> Unit, from: Scheduler = Schedulers.io(), to: Scheduler = AndroidSchedulers.mainThread()) {
+fun<T> execute(fromAction: () -> T, toAction: (T) -> Unit, from: Scheduler = Schedulers.io(), to: Scheduler = AndroidSchedulers.mainThread()) {
   from.scheduleDirect {
     val result = fromAction.invoke()
     to.scheduleDirect { toAction.invoke(result) }
@@ -55,7 +54,7 @@ fun<T> AsyncLooper.execute(fromAction: () -> T, toAction: (T) -> Unit, from: Sch
  * @param action action.
  * @return execute disposable.
  */
-fun AsyncLooper.io(action: () -> Unit) = execute(Schedulers.io(), action)
+fun io(action: Runnable) = execute(Schedulers.io(), action)
 
 /**
  * Execute expected action on computation thread.
@@ -63,4 +62,4 @@ fun AsyncLooper.io(action: () -> Unit) = execute(Schedulers.io(), action)
  * @param action action.
  * @return execute disposable.
  */
-fun AsyncLooper.compute(action: () -> Unit) = execute(Schedulers.computation(), action)
+fun compute(action: Runnable) = execute(Schedulers.computation(), action)
