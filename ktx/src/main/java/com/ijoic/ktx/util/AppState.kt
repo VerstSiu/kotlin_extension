@@ -34,6 +34,7 @@ object AppState {
    *
    * @param context context.
    */
+  @JvmStatic
   fun bindContext(context: Context) {
     refContext = WeakReference(context.applicationContext)
   }
@@ -41,6 +42,7 @@ object AppState {
   /**
    * Returns application context if exist.
    */
+  @JvmStatic
   fun getContext(): Context? {
     return refContext?.get()
   }
