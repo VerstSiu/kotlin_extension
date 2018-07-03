@@ -28,3 +28,15 @@ import kotlin.reflect.KMutableProperty0
 fun<T> KMutableProperty0<T?>.getOrCreate(creator: () -> T): T {
   return get().orCreate(creator) { set(it) }
 }
+
+/**
+ * Returns replaced new created item instance.
+ *
+ * @param creator item creator.
+ * @since 1.0
+ */
+fun<T> KMutableProperty0<T?>.replace(creator: () -> T): T {
+  val replaceValue = creator.invoke()
+  set(replaceValue)
+  return replaceValue
+}
