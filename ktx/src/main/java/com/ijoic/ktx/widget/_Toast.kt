@@ -31,6 +31,7 @@ import com.ijoic.ktx.util.AppState
  * @param message message.
  * @param duration toast duration.
  */
+@JvmOverloads
 fun Context?.showToast(message: String?, duration: Int = Toast.LENGTH_SHORT) {
   val context = this ?: AppState.getContext()
 
@@ -46,6 +47,7 @@ fun Context?.showToast(message: String?, duration: Int = Toast.LENGTH_SHORT) {
  * @param messageRes message res.
  * @param duration toast duration.
  */
+@JvmOverloads
 fun Context?.showToast(@StringRes messageRes: Int, duration: Int = Toast.LENGTH_SHORT) {
   val context = this ?: AppState.getContext()
 
@@ -61,6 +63,7 @@ fun Context?.showToast(@StringRes messageRes: Int, duration: Int = Toast.LENGTH_
  * @param message message.
  * @param duration toast duration.
  */
+@JvmOverloads
 fun Context?.showAppToast(message: String?, duration: Int = Toast.LENGTH_SHORT) {
   this?.applicationContext.showToast(message, duration)
 }
@@ -71,6 +74,7 @@ fun Context?.showAppToast(message: String?, duration: Int = Toast.LENGTH_SHORT) 
  * @param messageRes message res.
  * @param duration toast duration.
  */
+@JvmOverloads
 fun Context?.showAppToast(@StringRes messageRes: Int, duration: Int = Toast.LENGTH_SHORT) {
   val context = this ?: AppState.getContext()
 
