@@ -18,7 +18,7 @@
 @file:kotlin.jvm.JvmMultifileClass
 @file:kotlin.jvm.JvmName("SharedPrefsKt")
 
-package com.ijoic.ktx.util.preference
+package com.ijoic.ktx.content.preference
 
 import android.content.SharedPreferences
 

@@ -15,7 +15,7 @@
  *  limitations under the License.
  *
  */
-package com.ijoic.ktx.util.preference
+package com.ijoic.ktx.content.preference
 
 import android.content.SharedPreferences
 import kotlin.properties.ReadWriteProperty
