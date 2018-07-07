@@ -68,7 +68,7 @@ fun SharedPreferences.applyBoolean(key: String, value: Boolean) {
  * @param key key.
  * @param value value.
  */
-fun SharedPreferences.applyString(key: String, value: String) {
+fun SharedPreferences.applyString(key: String, value: String?) {
   edit().putString(key, value).apply()
 }
 
