@@ -32,11 +32,6 @@ abstract class AccessPreference(context: Context, name: String, accessMode: Int 
   internal val prefs = context.getSharedPreferences(name, accessMode)
 
   /**
-   * Edit id.
-   */
-  internal var editId = 1
-
-  /**
    * Inner shared preferences.
    */
   protected val innerPrefs = prefs
@@ -47,7 +42,6 @@ abstract class AccessPreference(context: Context, name: String, accessMode: Int 
    * @param key item key.
    */
   fun reset(key: String) {
-    ++editId
     prefs.applyRemove(key)
   }
 
@@ -55,7 +49,6 @@ abstract class AccessPreference(context: Context, name: String, accessMode: Int 
    * Clear all prefs contents.
    */
   fun clear() {
-    ++editId
     prefs.applyClear()
   }
 }
