@@ -22,7 +22,7 @@ abstract class StyleConfig(
    * @param set attribute set.
    */
   fun init(context: Context, set: AttributeSet? = null) {
-    val items = attrItems
+    val items = attrItems.apply { sortBy { it.getAttribute() } }
     val attrs = items.map { it.getAttribute() }.toIntArray()
     val array = context.obtainStyledAttributes(set, attrs, styleAttr, styleRes) ?: return
 
