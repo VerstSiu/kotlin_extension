@@ -15,12 +15,12 @@
  *  limitations under the License.
  *
  */
-package com.ijoic.ktx.util
+package com.ijoic.ktx.util.valuebox
 
 /**
- * Value box.
+ * Double box.
  *
  * @author verstsiu on 2018/7/9.
  * @version 1.0
  */
-class ValueBox<T>(var value: T)
+class DoubleBox @JvmOverloads constructor(defValue: Double = 0.0) : ValueBox<Double>(defValue)

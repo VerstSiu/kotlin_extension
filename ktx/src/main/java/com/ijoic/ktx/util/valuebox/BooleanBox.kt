@@ -15,22 +15,12 @@
  *  limitations under the License.
  *
  */
-package com.ijoic.ktx.util
+package com.ijoic.ktx.util.valuebox
 
 /**
- * Returns box instance.
+ * Boolean box.
  *
- * @param defValue default value.
+ * @author verstsiu on 2018/7/9.
+ * @version 1.0
  */
-fun<T> boxOf(defValue: T): ValueBox<T> {
-  return ValueBox(defValue)
-}
-
-/**
- * Returns optional box instance.
- *
- * @param defValue default value.
- */
-fun<T> optionalBoxOf(defValue: T? = null): ValueBox<T?> {
-  return ValueBox(defValue)
-}
+class BooleanBox @JvmOverloads constructor(defValue: Boolean = false) : ValueBox<Boolean>(defValue)
