@@ -49,7 +49,7 @@ fun Int.toHex(upperCase: Boolean = false): String {
  * @param upperCase upper case status.
  */
 private fun toByteHex(builder: StringBuilder, digit: Int, upperCase: Boolean = false) {
-  val byte = digit and 0x0F
+  val byte = digit and 0xFF
 
   builder.append(toBinaryCharacter(byte shr 4, upperCase))
   builder.append(toBinaryCharacter(byte, upperCase))
