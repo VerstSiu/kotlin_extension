@@ -29,6 +29,7 @@ private val charItemsUpperCase = charItemsBase.plus(charArrayOf('A', 'B', 'C', '
  *
  * @param upperCase upper case status.
  */
+@JvmOverloads
 fun Int.toHex(upperCase: Boolean = false): String {
   val builder = StringBuilder()
 
