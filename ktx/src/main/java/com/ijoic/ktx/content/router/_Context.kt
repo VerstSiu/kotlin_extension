@@ -26,7 +26,7 @@ import android.content.Intent
  * @param action action.
  * @param onError error action.
  */
-fun Context.routeTo(action: String, onError: ((Throwable) -> Unit)? = null) {
+fun Context.routeTo(action: String, onError: ((Context, Throwable) -> Unit)? = null) {
   routeTo(Intent(action), onError)
 }
 
@@ -36,13 +36,13 @@ fun Context.routeTo(action: String, onError: ((Throwable) -> Unit)? = null) {
  * @param intent intent.
  * @param onError error action.
  */
-fun Context.routeTo(intent: Intent, onError: ((Throwable) -> Unit)? = null) {
+fun Context.routeTo(intent: Intent, onError: ((Context, Throwable) -> Unit)? = null) {
   try {
     startActivity(intent)
   } catch (e: Throwable) {
     e.printStackTrace()
 
     val errorCallback = onError ?: Router.onRouteError
-    errorCallback.invoke(e)
+    errorCallback.invoke(this, e)
   }
 }

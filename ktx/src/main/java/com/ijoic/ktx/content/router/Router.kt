@@ -17,6 +17,8 @@
  */
 package com.ijoic.ktx.content.router
 
+import android.content.Context
+
 /**
  * Router config class.
  *
@@ -32,5 +34,5 @@ object Router {
   /**
    * Route error callback.
    */
-  var onRouteError: (Throwable) -> Unit = {}
+  var onRouteError: (Context, Throwable) -> Unit = { _, _ -> }
 }
