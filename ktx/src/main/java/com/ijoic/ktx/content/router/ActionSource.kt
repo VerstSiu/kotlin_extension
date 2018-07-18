@@ -27,10 +27,7 @@ import com.ijoic.ktx.util.orCreate
  * @author verstsiu on 2018/7/18.
  * @version 1.0
  */
-abstract class AbstractActionSource(
-    module: String? = null,
-    private val defPackage: String) {
-
+abstract class ActionSource(module: String? = null) {
   private val modulePrefix = module.isNullOrEmpty().matchTexture("", "$module.")
 
   /**
@@ -58,7 +55,7 @@ abstract class AbstractActionSource(
     if (prefix != null) {
       cachedPrefix = prefix
     }
-    return prefix ?: defPackage
+    return prefix ?: Router.defPackage
   }
 
 }
