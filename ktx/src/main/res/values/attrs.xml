@@ -6,7 +6,7 @@
   <attr name="ktx_autoSizeStepGranularity" format="dimension"/>
   <attr name="ktx_autoSizePresetSizes" format="reference"/>
 
-  <declare-styleable name="ktx_AutoSizeTextView">
+  <declare-styleable name="AutoSizeTextView">
     <attr name="android:typeface"/>
     <attr name="android:textStyle"/>
     <attr name="ktx_autoSizeMinTextSize"/>

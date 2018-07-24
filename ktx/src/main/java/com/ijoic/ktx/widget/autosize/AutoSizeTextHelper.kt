@@ -32,7 +32,7 @@ import android.util.TypedValue
 import android.widget.TextView
 import com.ijoic.ktx.R
 import com.ijoic.ktx.util.getOrCreate
-import com.ijoic.ktx.util.replace
+import com.ijoic.ktx.util.replaceExist
 import java.lang.reflect.Method
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -87,24 +87,24 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
     var autoSizeMaxTextSizeInPx = UNSET_AUTO_SIZE_UNIFORM_CONFIGURATION_VALUE
     var autoSizeStepGranularityInPx = UNSET_AUTO_SIZE_UNIFORM_CONFIGURATION_VALUE
 
-    val a = context.obtainStyledAttributes(attrs, R.styleable.ktx_AutoSizeTextView, defStyleAttr, 0)
-    if (a.hasValue(R.styleable.ktx_AutoSizeTextView_ktx_autoSizeStepGranularity)) {
+    val a = context.obtainStyledAttributes(attrs, R.styleable.AutoSizeTextView, defStyleAttr, 0)
+    if (a.hasValue(R.styleable.AutoSizeTextView_ktx_autoSizeStepGranularity)) {
       autoSizeStepGranularityInPx = a.getDimension(
-          R.styleable.ktx_AutoSizeTextView_ktx_autoSizeStepGranularity,
+          R.styleable.AutoSizeTextView_ktx_autoSizeStepGranularity,
           UNSET_AUTO_SIZE_UNIFORM_CONFIGURATION_VALUE)
     }
-    if (a.hasValue(R.styleable.ktx_AutoSizeTextView_ktx_autoSizeMinTextSize)) {
+    if (a.hasValue(R.styleable.AutoSizeTextView_ktx_autoSizeMinTextSize)) {
       autoSizeMinTextSizeInPx = a.getDimension(
-          R.styleable.ktx_AutoSizeTextView_ktx_autoSizeMinTextSize,
+          R.styleable.AutoSizeTextView_ktx_autoSizeMinTextSize,
           UNSET_AUTO_SIZE_UNIFORM_CONFIGURATION_VALUE)
     }
-    if (a.hasValue(R.styleable.ktx_AutoSizeTextView_ktx_autoSizeMaxTextSize)) {
+    if (a.hasValue(R.styleable.AutoSizeTextView_ktx_autoSizeMaxTextSize)) {
       autoSizeMaxTextSizeInPx = a.getDimension(
-          R.styleable.ktx_AutoSizeTextView_ktx_autoSizeMaxTextSize,
+          R.styleable.AutoSizeTextView_ktx_autoSizeMaxTextSize,
           UNSET_AUTO_SIZE_UNIFORM_CONFIGURATION_VALUE)
     }
-    if (a.hasValue(R.styleable.ktx_AutoSizeTextView_ktx_autoSizePresetSizes)) {
-      val autoSizeStepSizeArrayResId = a.getResourceId(R.styleable.ktx_AutoSizeTextView_ktx_autoSizePresetSizes, 0)
+    if (a.hasValue(R.styleable.AutoSizeTextView_ktx_autoSizePresetSizes)) {
+      val autoSizeStepSizeArrayResId = a.getResourceId(R.styleable.AutoSizeTextView_ktx_autoSizePresetSizes, 0)
 
       if (autoSizeStepSizeArrayResId > 0) {
         val autoSizePreDefTextSizes = a.resources.obtainTypedArray(autoSizeStepSizeArrayResId)
@@ -163,7 +163,7 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
   private fun setupAutoSizeUniformPresetSizesConfiguration():Boolean {
     val textSizes = autoSizeTextAvailableSizes
     val sizesLength = textSizes.size
-    val hasPresetAutoSizeValues = this::mHasPresetAutoSizeValues.replace { sizesLength > 0 }
+    val hasPresetAutoSizeValues = this::mHasPresetAutoSizeValues.replaceExist { sizesLength > 0 }
 
     if (hasPresetAutoSizeValues) {
       mAutoSizeMinTextSizeInPx = textSizes[0].toFloat()
