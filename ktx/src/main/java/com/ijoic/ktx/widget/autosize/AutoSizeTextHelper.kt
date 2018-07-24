@@ -85,6 +85,7 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
   internal val measureInfo by lazy { AutoSizeTextInfo() }
 
   private var maxHistoryMeasuredWidth: Int? = null
+  private var maxHistoryLayoutHeight: Int? = null
 
   internal fun loadFromAttributes(attrs:AttributeSet?, defStyleAttr:Int) {
     initDebugStatus(context, attrs, defStyleAttr)
@@ -255,6 +256,15 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
     return true
   }
 
+  internal fun onLayout(height: Int) {
+    val historyHeight = maxHistoryLayoutHeight
+
+    if (height > 0 && (historyHeight == null || historyHeight < height)) {
+      maxHistoryLayoutHeight = height
+    }
+    autoSizeText()
+  }
+
   /**
    * Automatically computes and sets the text size.
    *
@@ -270,13 +280,19 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
       }
 
       val horizontallyScrolling = invokeAndReturnWithDefault(mTextView, "getHorizontallyScrolling", false)
-      val atMostWidth = measureInfo.getAvailableWidth()
+
+      val historyWidth = measureInfo.getAvailableWidth()
       val availableWidth = when {
-        atMostWidth != null -> atMostWidth - mTextView.totalPaddingLeft - mTextView.totalPaddingRight
+        historyWidth != null -> historyWidth - mTextView.totalPaddingLeft - mTextView.totalPaddingRight
         horizontallyScrolling -> VERY_WIDE
         else -> mTextView.measuredWidth - mTextView.totalPaddingLeft - mTextView.totalPaddingRight
       }
-      val availableHeight = mTextView.height - mTextView.compoundPaddingBottom - mTextView.compoundPaddingTop
+
+      val historyHeight = maxHistoryLayoutHeight
+      val availableHeight = when {
+        historyHeight != null -> historyHeight - mTextView.compoundPaddingBottom - mTextView.compoundPaddingTop
+        else -> mTextView.height - mTextView.compoundPaddingBottom - mTextView.compoundPaddingTop
+      }
 
       if (availableWidth <= 0 || availableHeight <= 0) {
         printStateMessage("size") { "available width or height empty [skip!!]" }
@@ -503,7 +519,7 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
     try {
       // Cache lookup.
       val method = getTextViewMethod(methodName)
-      result = method?.invoke(obj) as T
+      result = method?.invoke(obj) as? T
     } catch (ex:Exception) {
       Log.w(TAG, "Failed to invoke TextView#$methodName() method", ex)
     }
