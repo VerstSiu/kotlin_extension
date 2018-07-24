@@ -39,6 +39,7 @@ import com.ijoic.ktx.util.replaceExist
 import java.lang.reflect.Method
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.reflect.KMutableProperty0
 
 /**
  * Utility class which encapsulates the logic for the TextView auto-size text feature added to
@@ -79,12 +80,9 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
   private var mHasPresetAutoSizeValues = false
   private var mTempTextPaint:TextPaint? = null
 
-  /**
-   * Measure info.
-   */
-  internal val measureInfo by lazy { AutoSizeTextInfo() }
-
   private var maxHistoryMeasuredWidth: Int? = null
+
+  private var maxHistoryLayoutWidth: Int? = null
   private var maxHistoryLayoutHeight: Int? = null
 
   internal fun loadFromAttributes(attrs:AttributeSet?, defStyleAttr:Int) {
@@ -256,13 +254,19 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
     return true
   }
 
-  internal fun onLayout(height: Int) {
-    val historyHeight = maxHistoryLayoutHeight
+  internal fun onLayout(width: Int, height: Int) {
+    updateHistorySize(this::maxHistoryLayoutWidth, width)
+    updateHistorySize(this::maxHistoryLayoutHeight, height)
 
-    if (height > 0 && (historyHeight == null || historyHeight < height)) {
-      maxHistoryLayoutHeight = height
-    }
     autoSizeText()
+  }
+
+  private fun updateHistorySize(property: KMutableProperty0<Int?>, size: Int) {
+    val oldSize = property.get()
+
+    if (size > 0 && (oldSize == null || size > oldSize)) {
+      property.set(size)
+    }
   }
 
   /**
@@ -280,14 +284,10 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
       }
 
       val horizontallyScrolling = invokeAndReturnWithDefault(mTextView, "getHorizontallyScrolling", false)
-
-      val historyWidth = measureInfo.getAvailableWidth()
       val availableWidth = when {
-        historyWidth != null -> historyWidth - mTextView.totalPaddingLeft - mTextView.totalPaddingRight
         horizontallyScrolling -> VERY_WIDE
-        else -> mTextView.measuredWidth - mTextView.totalPaddingLeft - mTextView.totalPaddingRight
+        else -> Math.max(mTextView.measuredWidth, maxHistoryLayoutWidth ?: 0) - mTextView.totalPaddingLeft - mTextView.totalPaddingRight
       }
-
       val availableHeight = Math.max(mTextView.height, maxHistoryLayoutHeight ?: 0) - mTextView.compoundPaddingBottom - mTextView.compoundPaddingTop
 
       if (availableWidth <= 0 || availableHeight <= 0) {
