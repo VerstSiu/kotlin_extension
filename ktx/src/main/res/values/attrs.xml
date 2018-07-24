@@ -5,6 +5,7 @@
   <attr name="ktx_autoSizeMaxTextSize" format="dimension"/>
   <attr name="ktx_autoSizeStepGranularity" format="dimension"/>
   <attr name="ktx_autoSizePresetSizes" format="reference"/>
+  <attr name="ktx_debugEnabled" format="boolean"/>
 
   <declare-styleable name="AutoSizeTextView">
     <attr name="android:typeface"/>
@@ -13,6 +14,7 @@
     <attr name="ktx_autoSizeMaxTextSize"/>
     <attr name="ktx_autoSizeStepGranularity"/>
     <attr name="ktx_autoSizePresetSizes"/>
+    <attr name="ktx_debugEnabled"/>
   </declare-styleable>
 
 </resources>

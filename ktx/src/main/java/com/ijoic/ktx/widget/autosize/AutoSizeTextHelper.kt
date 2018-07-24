@@ -31,6 +31,9 @@ import android.util.Log
 import android.util.TypedValue
 import android.widget.TextView
 import com.ijoic.ktx.R
+import com.ijoic.ktx.test.debug.DebugSource
+import com.ijoic.ktx.test.debug.initDebugStatus
+import com.ijoic.ktx.test.debug.printStateMessage
 import com.ijoic.ktx.util.getOrCreate
 import com.ijoic.ktx.util.replaceExist
 import java.lang.reflect.Method
@@ -45,8 +48,9 @@ import java.util.concurrent.ConcurrentHashMap
  * A TextView can be instructed to let the size of the text expand or contract automatically to
  * fill its layout based on the TextView's characteristics and boundaries.
  */
-internal class AutoSizeTextHelper internal constructor(private val mTextView:TextView) {
+internal class AutoSizeTextHelper internal constructor(private val mTextView:TextView): DebugSource {
   private val context: Context = mTextView.context
+  override var debugEnabled = false
 
   // Specify if auto-size text is needed.
   private var mNeedsAutoSizeText = false
@@ -83,6 +87,7 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
   private var maxHistoryMeasuredWidth: Int? = null
 
   internal fun loadFromAttributes(attrs:AttributeSet?, defStyleAttr:Int) {
+    initDebugStatus(context, attrs, defStyleAttr)
     var autoSizeMinTextSizeInPx = UNSET_AUTO_SIZE_UNIFORM_CONFIGURATION_VALUE
     var autoSizeMaxTextSizeInPx = UNSET_AUTO_SIZE_UNIFORM_CONFIGURATION_VALUE
     var autoSizeStepGranularityInPx = UNSET_AUTO_SIZE_UNIFORM_CONFIGURATION_VALUE
@@ -256,24 +261,28 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
    * @hide
    */
   internal fun autoSizeText() {
+    printStateMessage("size")
+
     if (mNeedsAutoSizeText) {
       if (mTextView.measuredHeight <= 0 || mTextView.measuredWidth <= 0) {
+        printStateMessage("size") { "width or height empty [skip!!]" }
         return
       }
 
       val horizontallyScrolling = invokeAndReturnWithDefault(mTextView, "getHorizontallyScrolling", false)
       val atMostWidth = measureInfo.getAvailableWidth()
-      val maxHistoryWidth = atMostWidth?.let { it - mTextView.totalPaddingLeft - mTextView.totalPaddingRight }
       val availableWidth = when {
-        maxHistoryWidth != null -> maxHistoryWidth
+        atMostWidth != null -> atMostWidth - mTextView.totalPaddingLeft - mTextView.totalPaddingRight
         horizontallyScrolling -> VERY_WIDE
         else -> mTextView.measuredWidth - mTextView.totalPaddingLeft - mTextView.totalPaddingRight
       }
       val availableHeight = mTextView.height - mTextView.compoundPaddingBottom - mTextView.compoundPaddingTop
 
       if (availableWidth <= 0 || availableHeight <= 0) {
+        printStateMessage("size") { "available width or height empty [skip!!]" }
         return
       }
+      printStateMessage("size") { "perform auto size: width - $availableWidth, height - $availableHeight" }
 
       synchronized (tempRectF) {
         tempRectF.apply {
@@ -288,6 +297,8 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
           setTextSizeInternal(TypedValue.COMPLEX_UNIT_PX, optimalTextSize)
         }
       }
+    } else {
+      printStateMessage("size") { "un need auto size text [skip!!]" }
     }
     // Always try to auto-size if enabled. Functions that do not want to trigger auto-sizing
     // after the next layout pass should set this to false.
