@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <attr name="ktx_autoSizeinTextSize" format="dimension"/>
+  <attr name="ktx_autoSizeMaxTextSize" format="dimension"/>
+  <attr name="ktx_autoSizeStepGranularity" format="dimension"/>
+  <attr name="ktx_autoSizePresetSizes" format="reference"/>
+
+  <declare-styleable name="ktx_AutoSizeTextView">
+    <attr name="android:typeface"/>
+    <attr name="android:textStyle"/>
+    <attr name="ktx_autoSizeMinTextSize"/>
+    <attr name="ktx_autoSizeMaxTextSize"/>
+    <attr name="ktx_autoSizeStepGranularity"/>
+    <attr name="ktx_autoSizePresetSizes"/>
+  </declare-styleable>
+
+</resources>
