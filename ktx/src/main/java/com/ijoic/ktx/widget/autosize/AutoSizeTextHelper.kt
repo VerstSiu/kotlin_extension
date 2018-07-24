@@ -288,11 +288,7 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
         else -> mTextView.measuredWidth - mTextView.totalPaddingLeft - mTextView.totalPaddingRight
       }
 
-      val historyHeight = maxHistoryLayoutHeight
-      val availableHeight = when {
-        historyHeight != null -> historyHeight - mTextView.compoundPaddingBottom - mTextView.compoundPaddingTop
-        else -> mTextView.height - mTextView.compoundPaddingBottom - mTextView.compoundPaddingTop
-      }
+      val availableHeight = Math.max(mTextView.height, maxHistoryLayoutHeight ?: 0) - mTextView.compoundPaddingBottom - mTextView.compoundPaddingTop
 
       if (availableWidth <= 0 || availableHeight <= 0) {
         printStateMessage("size") { "available width or height empty [skip!!]" }
