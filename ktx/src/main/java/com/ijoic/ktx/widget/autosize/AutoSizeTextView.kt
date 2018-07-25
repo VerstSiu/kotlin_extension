@@ -44,6 +44,7 @@ class AutoSizeTextView @JvmOverloads constructor(context: Context, attrs: Attrib
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     printStateMessage("measure") { "text: $text, width[${getSpecInfo(widthMeasureSpec)}], height[${getSpecInfo(heightMeasureSpec)}]" }
     super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+    printStateMessage("measure") { "text: $text, measured width[$measuredWidth], measured height[$measuredHeight]" }
   }
 
   private fun getSpecInfo(spec: Int): String {
