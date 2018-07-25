@@ -275,7 +275,7 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
    * @hide
    */
   internal fun autoSizeText() {
-    printStateMessage("size")
+    printStateMessage("size") { "text - ${mTextView.text}" }
 
     if (mNeedsAutoSizeText) {
       if (mTextView.measuredHeight <= 0 || mTextView.measuredWidth <= 0) {
@@ -406,6 +406,7 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
     if (widthChanged) {
       maxHistoryMeasuredWidth = measuredTextWidth
     }
+    printStateMessage("upgrade max measured width") { "text - $text, history width - $historyWidth, measured width - $measuredTextWidth, changed - $widthChanged" }
     return widthChanged
   }
 
