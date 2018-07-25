@@ -85,6 +85,8 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
   private var maxHistoryLayoutWidth: Int? = null
   private var maxHistoryLayoutHeight: Int? = null
 
+  private var measuredWidthChanged = false
+
   internal fun loadFromAttributes(attrs:AttributeSet?, defStyleAttr:Int) {
     initDebugStatus(context, attrs, defStyleAttr)
     var autoSizeMinTextSizeInPx = UNSET_AUTO_SIZE_UNIFORM_CONFIGURATION_VALUE
@@ -258,6 +260,7 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
     updateHistorySize(this::maxHistoryLayoutWidth, width)
     updateHistorySize(this::maxHistoryLayoutHeight, height)
 
+    measuredWidthChanged = false
     autoSizeText()
   }
 
@@ -375,7 +378,7 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
     // check for max measured with changed
     val maxTextSize = textSizes[highIndex]
 
-    if (upgradeMaxHistoryMeasuredWidth(maxTextSize)) {
+    if (measuredWidthChanged || upgradeMaxHistoryMeasuredWidth(maxTextSize)) {
       return maxTextSize
     }
 
@@ -405,6 +408,7 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
 
     if (widthChanged) {
       maxHistoryMeasuredWidth = measuredTextWidth
+      measuredWidthChanged = true
     }
     printStateMessage("upgrade max measured width") { "text - $text, history width - $historyWidth, measured width - $measuredTextWidth, changed - $widthChanged" }
     return widthChanged
