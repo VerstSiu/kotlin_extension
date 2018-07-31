@@ -287,11 +287,14 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
       }
 
       val horizontallyScrolling = invokeAndReturnWithDefault(mTextView, "getHorizontallyScrolling", false)
+      val expectedWidth = getExpectedSize(mTextView.measuredWidth, mTextView.getCompatMaxWidth(), maxHistoryLayoutWidth)
+      val expectedHeight = getExpectedSize(mTextView.measuredHeight, mTextView.getCompatMaxHeight(), maxHistoryLayoutHeight)
+
       val availableWidth = when {
         horizontallyScrolling -> VERY_WIDE
-        else -> Math.max(mTextView.measuredWidth, maxHistoryLayoutWidth ?: 0) - mTextView.totalPaddingLeft - mTextView.totalPaddingRight
+        else -> expectedWidth - mTextView.totalPaddingLeft - mTextView.totalPaddingRight
       }
-      val availableHeight = Math.max(mTextView.height, maxHistoryLayoutHeight ?: 0) - mTextView.compoundPaddingBottom - mTextView.compoundPaddingTop
+      val availableHeight = expectedHeight - mTextView.compoundPaddingBottom - mTextView.compoundPaddingTop
 
       if (availableWidth <= 0 || availableHeight <= 0) {
         printStateMessage("size") { "available width or height empty [skip!!]" }
@@ -318,6 +321,27 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
     // Always try to auto-size if enabled. Functions that do not want to trigger auto-sizing
     // after the next layout pass should set this to false.
     mNeedsAutoSizeText = true
+  }
+
+  private fun TextView.getCompatMaxWidth(): Int {
+    if (Build.VERSION.SDK_INT >= 16) {
+      return maxWidth
+    }
+    return 0
+  }
+
+  private fun TextView.getCompatMaxHeight(): Int {
+    if (Build.VERSION.SDK_INT >= 16) {
+      return maxHeight
+    }
+    return 0
+  }
+
+  private fun getExpectedSize(measuredSize: Int, maxSize: Int, historySize: Int?): Int {
+    return when {
+      maxSize <= 0 -> Math.max(measuredSize, historySize ?: 0)
+      else -> Math.max(measuredSize, maxSize)
+    }
   }
 
   private fun setTextSizeInternal(unit:Int, size:Float) {
