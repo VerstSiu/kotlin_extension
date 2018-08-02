@@ -17,7 +17,9 @@
  */
 package com.ijoic.ktx.util
 
+import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KMutableProperty0
+import kotlin.reflect.KProperty
 
 /**
  * Returns cached or new created item instance.
@@ -52,3 +54,20 @@ fun<T> KMutableProperty0<T>.replaceExist(creator: () -> T): T {
   set(replaceValue)
   return replaceValue
 }
+
+/* <>-<>-<>-<>-<>-<>-<>-<> lazy :start <>-<>-<>-<>-<>-<>-<>-<> */
+
+/**
+ * Returns mapped lazy read only property.
+ *
+ * @param initializer property value initializer.
+ */
+fun<R, T> mapLazy(initializer: () -> T) = object: ReadOnlyProperty<R, T> {
+  private val value by lazy { initializer() }
+
+  override fun getValue(thisRef: R, property: KProperty<*>): T {
+    return value
+  }
+}
+
+/* <>-<>-<>-<>-<>-<>-<>-<> lazy :end <>-<>-<>-<>-<>-<>-<>-<> */
