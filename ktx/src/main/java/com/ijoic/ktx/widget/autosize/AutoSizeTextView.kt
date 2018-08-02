@@ -63,12 +63,12 @@ class AutoSizeTextView @JvmOverloads constructor(context: Context, attrs: Attrib
   override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
     super.onLayout(changed, left, top, right, bottom)
     printStateMessage("text") { "layout changed: changed - $changed, left - $left, top - $top, right - $right, bottom - $bottom" }
-    helper?.onLayout(right - left, bottom - top)
+    helper?.onLayout(changed, right - left, bottom - top)
   }
 
   override fun onTextChanged(text: CharSequence?, start: Int, lengthBefore: Int, lengthAfter: Int) {
     super.onTextChanged(text, start, lengthBefore, lengthAfter)
     printStateMessage("text") { "text changed: text - $text, start - $start, length before - $lengthBefore, length after - $lengthAfter" }
-    helper?.autoSizeText()
+    helper?.autoSizeText(false)
   }
 }

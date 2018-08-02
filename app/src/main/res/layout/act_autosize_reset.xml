@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@android:color/white">
+
+  <android.support.constraint.Guideline
+    android:id="@+id/guideline_left_border"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_constraintGuide_percent="0.25"/>
+
+  <android.support.constraint.Guideline
+    android:id="@+id/guideline_right_border"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_constraintGuide_percent="0.75"/>
+
+  <View
+    android:layout_width="1dp"
+    android:layout_height="match_parent"
+    android:background="#fc0"
+    app:layout_constraintStart_toStartOf="@id/guideline_left_border"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"/>
+
+  <View
+    android:layout_width="1dp"
+    android:layout_height="match_parent"
+    android:background="#fc0"
+    app:layout_constraintEnd_toEndOf="@id/guideline_right_border"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"/>
+
+  <com.ijoic.ktx.widget.autosize.AutoSizeTextView
+    android:id="@+id/text_first"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:background="#f5f5f5"
+    android:maxLines="1"
+    android:ellipsize="end"
+    android:textSize="24sp"
+    app:layout_constraintHorizontal_chainStyle="packed"
+    app:layout_constraintWidth_default="wrap"
+    app:layout_constraintStart_toStartOf="@id/guideline_left_border"
+    app:layout_constraintEnd_toStartOf="@id/text_second"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:ktx_autoSizeMaxTextSize="24sp"
+    app:ktx_autoSizeMinTextSize="12sp"
+    app:ktx_autoSizeMode="reset"
+    app:ktx_debugEnabled="true"
+    android:text="My name"/>
+
+  <TextView
+    android:id="@+id/text_second"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="8dp"
+    android:layout_marginStart="8dp"
+    android:background="#efc"
+    android:textSize="24sp"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toEndOf="@id/text_first"
+    app:layout_constraintEnd_toStartOf="@id/text_last"
+    android:text="is"/>
+
+  <TextView
+    android:id="@+id/text_last"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="8dp"
+    android:layout_marginStart="8dp"
+    android:background="#f5f5f5"
+    android:textSize="24sp"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toEndOf="@id/text_second"
+    app:layout_constraintEnd_toEndOf="@id/guideline_right_border"
+    android:text="Tomy"/>
+
+</android.support.constraint.ConstraintLayout>

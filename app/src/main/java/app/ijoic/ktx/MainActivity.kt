@@ -1,16 +1,18 @@
 package app.ijoic.ktx
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.widget.Toast
-import com.ijoic.ktx.rxjava.execute
+import app.ijoic.ktx.autosize.AutoSizeActivity
+import com.ijoic.ktx.content.router.routeTo
+import kotlinx.android.synthetic.main.act_main.*
 
 class MainActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
+    setContentView(R.layout.act_main)
 
-    execute({ "..." }, { Toast.makeText(this@MainActivity, it, Toast.LENGTH_SHORT).show() })
+    test_case_auto_size.setOnClickListener { routeTo(Intent(this, AutoSizeActivity::class.java)) }
   }
 }

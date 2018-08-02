@@ -1,3 +1,11 @@
 <resources>
+
   <string name="app_name">Kotlin Extension</string>
+
+  <string name="test_case_auto_size">Auto Size</string>
+
+  <string name="action_mode_none">Mode None</string>
+  <string name="action_mode_wrap">Mode Wrap</string>
+  <string name="action_mode_reset">Mode Reset</string>
+
 </resources>

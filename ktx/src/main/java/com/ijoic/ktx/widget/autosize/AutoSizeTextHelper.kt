@@ -36,10 +36,11 @@ import com.ijoic.ktx.test.debug.initDebugStatus
 import com.ijoic.ktx.test.debug.printStateMessage
 import com.ijoic.ktx.util.getOrCreate
 import com.ijoic.ktx.util.replaceExist
+import com.ijoic.ktx.widget.autosize.mode.ModeProvider
+import com.ijoic.ktx.widget.autosize.mode.ModeProviderFactory
 import java.lang.reflect.Method
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-import kotlin.reflect.KMutableProperty0
 
 /**
  * Utility class which encapsulates the logic for the TextView auto-size text feature added to
@@ -51,6 +52,7 @@ import kotlin.reflect.KMutableProperty0
  */
 internal class AutoSizeTextHelper internal constructor(private val mTextView:TextView): DebugSource {
   private val context: Context = mTextView.context
+  private var provider: ModeProvider? = null
   override var debugEnabled = false
 
   // Specify if auto-size text is needed.
@@ -80,18 +82,12 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
   private var mHasPresetAutoSizeValues = false
   private var mTempTextPaint:TextPaint? = null
 
-  private var maxHistoryMeasuredWidth: Int? = null
-
-  private var maxHistoryLayoutWidth: Int? = null
-  private var maxHistoryLayoutHeight: Int? = null
-
-  private var measuredWidthChanged = false
-
   internal fun loadFromAttributes(attrs:AttributeSet?, defStyleAttr:Int) {
     initDebugStatus(context, attrs, defStyleAttr)
     var autoSizeMinTextSizeInPx = UNSET_AUTO_SIZE_UNIFORM_CONFIGURATION_VALUE
     var autoSizeMaxTextSizeInPx = UNSET_AUTO_SIZE_UNIFORM_CONFIGURATION_VALUE
     var autoSizeStepGranularityInPx = UNSET_AUTO_SIZE_UNIFORM_CONFIGURATION_VALUE
+    var autoSizeMode = ModeProviderFactory.DEFAULT_AUTO_SIZE_MODE
 
     val a = context.obtainStyledAttributes(attrs, R.styleable.AutoSizeTextView, defStyleAttr, 0)
     if (a.hasValue(R.styleable.AutoSizeTextView_ktx_autoSizeStepGranularity)) {
@@ -117,6 +113,9 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
         setupAutoSizeUniformPresetSizes(autoSizePreDefTextSizes)
         autoSizePreDefTextSizes.recycle()
       }
+    }
+    if (a.hasValue(R.styleable.AutoSizeTextView_ktx_autoSizeMode)) {
+      autoSizeMode = a.getInt(R.styleable.AutoSizeTextView_ktx_autoSizeMode, autoSizeMode)
     }
     a.recycle()
 
@@ -148,6 +147,10 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
           autoSizeMinTextSizeInPx,
           autoSizeMaxTextSizeInPx,
           autoSizeStepGranularityInPx)
+    }
+
+    provider = ModeProviderFactory.getProvider(autoSizeMode).apply {
+      debugEnabled = this@AutoSizeTextHelper.debugEnabled
     }
 
     setupAutoSizeText()
@@ -256,20 +259,9 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
     return true
   }
 
-  internal fun onLayout(width: Int, height: Int) {
-    updateHistorySize(this::maxHistoryLayoutWidth, width)
-    updateHistorySize(this::maxHistoryLayoutHeight, height)
-
-    measuredWidthChanged = false
-    autoSizeText()
-  }
-
-  private fun updateHistorySize(property: KMutableProperty0<Int?>, size: Int) {
-    val oldSize = property.get()
-
-    if (size > 0 && (oldSize == null || size > oldSize)) {
-      property.set(size)
-    }
+  internal fun onLayout(changed: Boolean, width: Int, height: Int) {
+    provider?.onLayout(changed, width, height)
+    autoSizeText(true)
   }
 
   /**
@@ -277,7 +269,11 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
    *
    * @hide
    */
-  internal fun autoSizeText() {
+  internal fun autoSizeText(onLayout: Boolean) {
+    val text = getDisplayText()
+    val provider = this.provider ?: return
+
+    provider.upgradeMeasureText(text)
     printStateMessage("size") { "text - ${mTextView.text}" }
 
     if (mNeedsAutoSizeText) {
@@ -289,9 +285,9 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
       val horizontallyScrolling = invokeAndReturnWithDefault(mTextView, "getHorizontallyScrolling", false)
       val availableWidth = when {
         horizontallyScrolling -> VERY_WIDE
-        else -> Math.max(mTextView.measuredWidth, maxHistoryLayoutWidth ?: 0) - mTextView.totalPaddingLeft - mTextView.totalPaddingRight
+        else -> provider.getExpectedViewWidth(mTextView.measuredWidth) - mTextView.totalPaddingLeft - mTextView.totalPaddingRight
       }
-      val availableHeight = Math.max(mTextView.height, maxHistoryLayoutHeight ?: 0) - mTextView.compoundPaddingBottom - mTextView.compoundPaddingTop
+      val availableHeight = provider.getExpectedViewHeight(mTextView.height) - mTextView.compoundPaddingBottom - mTextView.compoundPaddingTop
 
       if (availableWidth <= 0 || availableHeight <= 0) {
         printStateMessage("size") { "available width or height empty [skip!!]" }
@@ -306,9 +302,11 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
           bottom = availableHeight.toFloat()
         }
 
-        val optimalTextSize = findLargestTextSizeWhichFits(tempRectF).toFloat()
+        val currTextSize = mTextView.textSize
+        val optimalTextSize = findLargestTextSizeWhichFits(onLayout, text, provider, currTextSize, tempRectF).toFloat()
+        printStateMessage("match") { "optimal text size - $optimalTextSize" }
 
-        if (optimalTextSize != mTextView.textSize) {
+        if (optimalTextSize != currTextSize) {
           setTextSizeInternal(TypedValue.COMPLEX_UNIT_PX, optimalTextSize)
         }
       }
@@ -351,7 +349,7 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
         if (!isInLayout) {
           mTextView.requestLayout()
         } else {
-          mTextView.forceLayout()
+          mTextView.requestLayout()
         }
 
         mTextView.invalidate()
@@ -363,7 +361,7 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
    * Performs a binary search to find the largest text size that will still fit within the size
    * available to this view.
    */
-  private fun findLargestTextSizeWhichFits(availableSpace:RectF):Int {
+  private fun findLargestTextSizeWhichFits(onLayout: Boolean, text: CharSequence, provider: ModeProvider, currTextSize: Float, availableSpace:RectF):Int {
     val textSizes = autoSizeTextAvailableSizes
     val sizesCount = textSizes.size
     if (sizesCount == 0) {
@@ -376,9 +374,11 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
     var sizeToTryIndex:Int
 
     // check for max measured with changed
+    val paint = getResetTextPaint()
     val maxTextSize = textSizes[highIndex]
 
-    if (measuredWidthChanged || upgradeMaxHistoryMeasuredWidth(maxTextSize)) {
+    if (provider.isResetTextSizeEnabled(onLayout, text, paint, currTextSize.toInt(), maxTextSize)) {
+      printStateMessage("match") { "reset text size required" }
       return maxTextSize
     }
 
@@ -386,7 +386,7 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
     while (lowIndex <= highIndex) {
       sizeToTryIndex = (lowIndex + highIndex) / 2
 
-      if (suggestedSizeFitsInSpace(textSizes[sizeToTryIndex], availableSpace)) {
+      if (suggestedSizeFitsInSpace(text, paint, textSizes[sizeToTryIndex], availableSpace)) {
         bestSizeIndex = lowIndex
         lowIndex = sizeToTryIndex + 1
       } else {
@@ -398,32 +398,15 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
     return textSizes[bestSizeIndex]
   }
 
-  private fun upgradeMaxHistoryMeasuredWidth(textSizeInPx: Int): Boolean {
-    val text = getDisplayText()
-    val textPaint = getResetTextPaint(textSizeInPx)
-    val measuredTextWidth = Math.round(textPaint.measureText(text.toString()))
-
-    val historyWidth = maxHistoryMeasuredWidth
-    val widthChanged = historyWidth == null || measuredTextWidth > historyWidth
-
-    if (widthChanged) {
-      maxHistoryMeasuredWidth = measuredTextWidth
-      measuredWidthChanged = true
-    }
-    printStateMessage("upgrade max measured width") { "text - $text, history width - $historyWidth, measured width - $measuredTextWidth, changed - $widthChanged" }
-    return widthChanged
-  }
-
-  private fun suggestedSizeFitsInSpace(suggestedSizeInPx:Int, availableSpace:RectF):Boolean {
-    val text = getDisplayText()
+  private fun suggestedSizeFitsInSpace(text: CharSequence, paint: TextPaint, suggestedSizeInPx:Int, availableSpace:RectF):Boolean {
     val maxLines = if (Build.VERSION.SDK_INT >= 16) mTextView.maxLines else -1
-    val textPaint = getResetTextPaint(suggestedSizeInPx)
+    paint.textSize = suggestedSizeInPx.toFloat()
 
     // Needs reflection call due to being private.
     val alignment = invokeAndReturnWithDefault(mTextView, "getLayoutAlignment", Layout.Alignment.ALIGN_NORMAL)
     val layout =  when {
-      Build.VERSION.SDK_INT >= 23 -> createStaticLayoutForMeasuring(textPaint, text, alignment, Math.round(availableSpace.right), maxLines)
-      else -> createStaticLayoutForMeasuringPre23(textPaint, text, alignment, Math.round(availableSpace.right))
+      Build.VERSION.SDK_INT >= 23 -> createStaticLayoutForMeasuring(paint, text, alignment, Math.round(availableSpace.right), maxLines)
+      else -> createStaticLayoutForMeasuringPre23(paint, text, alignment, Math.round(availableSpace.right))
     }
 
     // Lines overflow.
@@ -455,7 +438,7 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
   /**
    * Returns reset text paint.
    */
-  private fun getResetTextPaint(textSizeInPx: Int): TextPaint {
+  private fun getResetTextPaint(): TextPaint {
     val textPaintExist = mTempTextPaint != null
     val textPaint = this::mTempTextPaint.getOrCreate { TextPaint() }
 
@@ -464,7 +447,6 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
     }
 
     textPaint.set(mTextView.paint)
-    textPaint.textSize = textSizeInPx.toFloat()
 
     return textPaint
   }

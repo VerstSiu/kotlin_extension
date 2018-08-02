@@ -9,6 +9,8 @@
     android:roundIcon="@mipmap/ic_launcher_round"
     android:supportsRtl="true"
     android:theme="@style/AppTheme">
+
+    <!-- main -->
     <activity android:name=".MainActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
@@ -16,6 +18,23 @@
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
+
+    <!-- auto size -->
+    <activity
+      android:name=".autosize.AutoSizeActivity"
+      android:label="@string/test_case_auto_size"/>
+
+    <activity
+      android:name=".autosize.ui.mode.AutoSizeNoneActivity"
+      android:label="@string/action_mode_none"/>
+
+    <activity
+      android:name=".autosize.ui.mode.AutoSizeWrapActivity"
+      android:label="@string/action_mode_wrap"/>
+
+    <activity
+      android:name=".autosize.ui.mode.AutoSizeResetActivity"
+      android:label="@string/action_mode_reset"/>
   </application>
 
 </manifest>
