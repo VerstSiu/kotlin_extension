@@ -349,7 +349,7 @@ internal class AutoSizeTextHelper internal constructor(private val mTextView:Tex
         if (!isInLayout) {
           mTextView.requestLayout()
         } else {
-          mTextView.requestLayout()
+          mTextView.forceLayout()
         }
 
         mTextView.invalidate()
