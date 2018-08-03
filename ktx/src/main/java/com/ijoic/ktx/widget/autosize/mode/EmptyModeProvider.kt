@@ -25,7 +25,7 @@ import android.text.TextPaint
  * @author verstsiu on 2018/7/31.
  * @version 1.0
  */
-object EmptyModeProvider: ModeProvider {
+internal object EmptyModeProvider: ModeProvider {
   override var debugEnabled = false
 
   override fun onLayout(changed: Boolean, width: Int, height: Int) {
