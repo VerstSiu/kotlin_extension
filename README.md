@@ -1,8 +1,32 @@
 # Kotlin Extension
 
+[![](https://jitpack.io/v/VerstSiu/kotlin_extension.svg)](https://jitpack.io/#VerstSiu/kotlin_extension)
+
 Android kotlin extension.
 
 * [Wiki](https://github.com/VerstSiu/kotlin_extension/wiki)
+
+## Get Start
+
+1. Add `jitpack` repository to root `build.gradle`:
+
+    ```gradle
+    allprojects {
+        repositories {
+            maven { url 'https://jitpack.io' }
+        }
+    }
+    ```
+
+2. Add library dependency to project's `build.gradle`:
+
+    ```gradle
+    dependencies {
+        implementation 'com.github.VerstSiu.kotlin_extension:ktx:1.0'
+        implementation 'com.github.VerstSiu.kotlin_extension:ktx-guava:1.0'
+        implementation 'com.github.VerstSiu.kotlin_extension:ktx-rxjava:1.0'
+    }
+    ```
 
 ## License
 
