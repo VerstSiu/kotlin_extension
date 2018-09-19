@@ -29,5 +29,6 @@ dependencies {
     androidTestImplementation project.depend_test_espresso
 
     implementation project.depend_support_appCompatV7
+    implementation project.depend_support_recyclerviewV7
     implementation project.depend_kotlin
 }
