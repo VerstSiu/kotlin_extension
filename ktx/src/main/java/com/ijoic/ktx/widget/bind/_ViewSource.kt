@@ -41,6 +41,7 @@ fun<T: View> ViewSource.bindView(@IdRes id: Int): ReadOnlyProperty<ViewSource, T
   val result = BindProperty<ViewSource, T> { thisRef, _ ->
     thisRef.findViewById(id) ?: throw IllegalArgumentException("could not find related view: source - $thisRef, id - $id")
   }
+  logInfo("cache property: source - ${this}, property - $result")
   getPropertyItems(this).add(result)
 
   return result
@@ -65,7 +66,12 @@ fun<T: View> ViewSource.bindViewOptional(@IdRes id: Int): ReadOnlyProperty<ViewS
  * Release bind views.
  */
 fun ViewSource.releaseBindViews() {
-  getPropertyItemsOrNull(this)?.forEach { it.reset() }
+  logInfo("release bind views: source - ${this}")
+
+  getPropertyItemsOrNull(this)?.forEach {
+    logInfo("release view: source - ${this}, property - $it")
+    it.reset()
+  }
 }
 
 /**
@@ -88,4 +94,8 @@ internal class BindProperty<R, T>(private val fetchValue: (R, KProperty<*>) -> T
     cacheValue = null
   }
 
+}
+
+private fun logInfo(message: String) {
+  println(">>>> bind view >>>> $message")
 }
