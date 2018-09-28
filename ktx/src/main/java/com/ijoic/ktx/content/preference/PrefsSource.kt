@@ -17,35 +17,22 @@
  */
 package com.ijoic.ktx.content.preference
 
-import android.content.Context
 import android.content.SharedPreferences
 
 /**
- * Access preference.
+ * Preferences source.
  *
- * @author verstsiu on 2018/7/7.
- * @version 1.0
+ * @author verstsiu on 2018/9/28
+ * @version 1.1
  */
-abstract class AccessPreference(context: Context, name: String, accessMode: Int = Context.MODE_PRIVATE): PrefsSource {
+interface PrefsSource {
+  /**
+   * Inner preferences.
+   */
+  val innerPrefs: SharedPreferences
 
   /**
-   * Inner shared preferences.
+   * Generate mapped preferences key.
    */
-  override val innerPrefs: SharedPreferences = context.getSharedPreferences(name, accessMode)
-
-  /**
-   * Reset saved prefs item.
-   *
-   * @param key item key.
-   */
-  fun reset(key: String) {
-    innerPrefs.applyRemove(key)
-  }
-
-  /**
-   * Clear all prefs contents.
-   */
-  fun clear() {
-    innerPrefs.applyClear()
-  }
+  fun genMapKey(key: String): String = key
 }

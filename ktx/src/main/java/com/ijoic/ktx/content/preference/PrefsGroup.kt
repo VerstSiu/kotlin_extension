@@ -17,35 +17,33 @@
  */
 package com.ijoic.ktx.content.preference
 
-import android.content.Context
-import android.content.SharedPreferences
+import com.ijoic.ktx.util.getOrCreate
 
 /**
- * Access preference.
+ * Preferences group.
  *
- * @author verstsiu on 2018/7/7.
- * @version 1.0
+ * @author verstsiu on 2018/9/28
+ * @version 1.1
  */
-abstract class AccessPreference(context: Context, name: String, accessMode: Int = Context.MODE_PRIVATE): PrefsSource {
+class PrefsGroup<T: PrefsChild> internal constructor(
+    private val name: String,
+    private val source: PrefsSource,
+    private val createChild: () -> T,
+    private val mapChildName: (String, String) -> String) {
+
+  private val childMap by lazy { mutableMapOf<String, T>() }
 
   /**
-   * Inner shared preferences.
-   */
-  override val innerPrefs: SharedPreferences = context.getSharedPreferences(name, accessMode)
-
-  /**
-   * Reset saved prefs item.
+   * Returns child prefs source.
    *
-   * @param key item key.
+   * @param name child name.
    */
-  fun reset(key: String) {
-    innerPrefs.applyRemove(key)
-  }
-
-  /**
-   * Clear all prefs contents.
-   */
-  fun clear() {
-    innerPrefs.applyClear()
+  fun getChild(name: String): T {
+    return childMap.getOrCreate(name) {
+      createChild().apply {
+        this.name = mapChildName(this@PrefsGroup.name, name)
+        this.source = this@PrefsGroup.source
+      }
+    }
   }
 }
