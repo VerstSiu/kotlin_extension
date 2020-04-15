@@ -1,6 +1,6 @@
 # Kotlin Extension
 
-[![](https://jitpack.io/v/VerstSiu/kotlin_extension.svg)](https://jitpack.io/#VerstSiu/kotlin_extension)
+[![](https://jitpack.io/v/Muchenyao/kotlin_extension.svg)](https://jitpack.io/#Muchenyao/kotlin_extension)
 
 Android kotlin extension.
 
@@ -21,8 +21,9 @@ Android kotlin extension.
 2. Add library dependency to project's `build.gradle`:
 
     ```gradle
+   // choose one or more as needed
     dependencies {
-        implementation 'com.github.VerstSiu.kotlin_extension:ktx:1.0'
+        implementation 'com.github.Muchenyao.kotlin_extension:ktx:1.2'
         implementation 'com.github.VerstSiu.kotlin_extension:ktx-guava:1.0'
         implementation 'com.github.VerstSiu.kotlin_extension:ktx-rxjava:1.0'
     }
