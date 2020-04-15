@@ -39,13 +39,13 @@
 
   <com.ijoic.ktx.widget.autosize.AutoSizeTextView
     android:id="@+id/test_message"
-    android:layout_width="0dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textSize="22sp"
     android:maxLines="1"
     android:ellipsize="end"
     android:background="#f5f5f5"
-    app:layout_constraintWidth_default="wrap"
+    app:layout_constrainedWidth="true"
     app:layout_constraintStart_toEndOf="@id/guideline_left_border"
     app:layout_constraintEnd_toStartOf="@id/guideline_right_border"
     app:layout_constraintTop_toTopOf="parent"

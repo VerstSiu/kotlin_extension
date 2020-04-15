@@ -17,10 +17,12 @@
  */
 package usecase.ijoic.ktx.test
 
-import com.ijoic.ktx.test.*
 import com.ijoic.ktx.util.orCreate
 import org.junit.Test
 import usecase.ijoic.ktx.entity.User
+import usecase.ijoic.ktx.util.assertExist
+import usecase.ijoic.ktx.util.assertNotExist
+import usecase.ijoic.ktx.util.assertProperty
 
 /**
  * Assert test.

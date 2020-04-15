@@ -15,9 +15,9 @@
  *  limitations under the License.
  *
  */
-package com.ijoic.ktx.test
+package usecase.ijoic.ktx.util
 
-import junit.framework.Assert.*
+import org.junit.Assert.*
 import kotlin.reflect.KProperty0
 
 /**

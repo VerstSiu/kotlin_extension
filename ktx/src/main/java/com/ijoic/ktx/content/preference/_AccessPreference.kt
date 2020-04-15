@@ -77,7 +77,7 @@ fun AccessPreference.bindBoolean(key: String, defValue: Boolean? = null, getDefa
  * @param getDefault prefs item default value getter.
  */
 fun AccessPreference.bindString(key: String, defValue: String? = null, getDefault: (() -> String)? = null): ReadWriteProperty<AccessPreference, String> = AccessProperty(
-    { getString(key, defValue ?: getDefault?.invoke() ?: "") },
+    { getString(key, defValue ?: getDefault?.invoke()) ?: ""},
     { applyString(key, it) }
 )
 
@@ -89,7 +89,7 @@ fun AccessPreference.bindString(key: String, defValue: String? = null, getDefaul
  * @param getDefault prefs item default value getter.
  */
 fun AccessPreference.bindStringSet(key: String, defValue: Set<String>? = null, getDefault: (() -> Set<String>)? = null): ReadWriteProperty<AccessPreference, Set<String>> = AccessProperty(
-    { getStringSet(key, defValue ?: getDefault?.invoke() ?: emptySet()) },
+    { getStringSet(key, defValue ?: getDefault?.invoke()) ?: emptySet() },
     { applyStringSet(key, it) }
 )
 
