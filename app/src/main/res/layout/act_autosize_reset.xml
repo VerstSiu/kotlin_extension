@@ -39,14 +39,14 @@
 
   <com.ijoic.ktx.widget.autosize.AutoSizeTextView
     android:id="@+id/text_first"
-    android:layout_width="0dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="#f5f5f5"
     android:maxLines="1"
     android:ellipsize="end"
     android:textSize="24sp"
     app:layout_constraintHorizontal_chainStyle="packed"
-    app:layout_constraintWidth_default="wrap"
+    app:layout_constrainedWidth="true"
     app:layout_constraintStart_toStartOf="@id/guideline_left_border"
     app:layout_constraintEnd_toStartOf="@id/text_second"
     app:layout_constraintTop_toTopOf="parent"
