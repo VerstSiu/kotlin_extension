@@ -1,0 +1,20 @@
+{
+  "name": "kotlin_extension",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VerstSiu/kotlin_extension.git"
+  },
+  "author": "verstsiu",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/VerstSiu/kotlin_extension/issues"
+  },
+  "homepage": "https://github.com/VerstSiu/kotlin_extension#readme",
+  "private": true
+}
