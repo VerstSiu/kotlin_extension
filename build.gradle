@@ -2,31 +2,22 @@
 
 buildscript {
     ext {
-        kotlin_version = '1.4.10'
-        support_version = '27.1.1'
-
         compileSdkVersion = 29
         minSdkVersion = 16
         targetSdkVersion = 29
         versionCode = 1
         versionName = "1.0"
 
-        depend_support_appCompatV7 = "com.android.support:appcompat-v7:$support_version"
-        depend_support_recyclerviewV7 = "com.android.support:recyclerview-v7:$support_version"
-        depend_support_v4 = "com.android.support:support-v4:$support_version"
-        depend_support_design = "com.android.support:design:$support_version"
-        depend_support_constraintLayout = 'com.android.support.constraint:constraint-layout:1.1.0'
+        kotlin_version = '1.4.10'
+        support_version = '28.0.0'
 
-        depend_kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-        depend_kotlin_reflect = "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-
-        depend_google_guava = "com.google.guava:guava:23.5-android"
-        depend_rxAndroid = 'io.reactivex.rxjava2:rxandroid:2.0.1'
-        depend_rxjava = 'io.reactivex.rxjava2:rxjava:2.1.7'
-
-        depend_junit = 'junit:junit:4.12'
-        depend_test_runner = 'com.android.support.test:runner:1.0.2'
-        depend_test_espresso = 'com.android.support.test.espresso:espresso-core:3.0.2'
+        constraintLayout_version = '2.0.4'
+        guava_version = '30.0-android'
+        rx_android_version = '2.0.1'
+        rxjava_version = '2.1.7'
+        junit_version = '4.13.1'
+        runner_version = '1.0.2'
+        espresso_version = '3.0.2'
     }
     repositories {
         google()

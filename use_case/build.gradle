@@ -27,13 +27,12 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    testImplementation project.depend_junit
-    androidTestImplementation project.depend_test_runner
-    androidTestImplementation project.depend_test_espresso
-
-    implementation project.depend_support_appCompatV7
-    implementation project.depend_kotlin
-    implementation project.depend_kotlin_reflect
+    implementation "com.android.support:appcompat-v7:$support_version"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    testImplementation "junit:junit:$junit_version"
+    androidTestImplementation "com.android.support.test:runner:$runner_version"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$espresso_version"
 
     implementation project(':ktx')
     implementation project(':ktx-guava')
