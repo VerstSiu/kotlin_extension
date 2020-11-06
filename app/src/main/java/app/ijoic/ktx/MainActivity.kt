@@ -2,7 +2,7 @@ package app.ijoic.ktx
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import app.ijoic.ktx.autosize.AutoSizeActivity
 import com.ijoic.ktx.content.router.routeTo

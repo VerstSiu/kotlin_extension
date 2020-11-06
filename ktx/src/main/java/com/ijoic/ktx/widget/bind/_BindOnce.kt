@@ -1,9 +1,9 @@
 package com.ijoic.ktx.widget.bind
 
 import android.app.Activity
-import android.support.annotation.IdRes
-import android.support.v4.app.Fragment
-import android.support.v7.widget.RecyclerView
+import androidx.annotation.IdRes
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty

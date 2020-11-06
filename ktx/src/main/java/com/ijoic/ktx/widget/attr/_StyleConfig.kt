@@ -4,7 +4,7 @@ import android.content.res.ColorStateList
 import android.content.res.TypedArray
 import android.graphics.Color
 import android.graphics.drawable.Drawable
-import android.support.annotation.AttrRes
+import androidx.annotation.AttrRes
 import com.ijoic.ktx.util.valuebox.ValueBox
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty

@@ -18,7 +18,7 @@
 package com.ijoic.ktx.widget.attr
 
 import android.content.res.TypedArray
-import android.support.annotation.AttrRes
+import androidx.annotation.AttrRes
 import com.ijoic.ktx.util.valuebox.ValueBox
 
 /**

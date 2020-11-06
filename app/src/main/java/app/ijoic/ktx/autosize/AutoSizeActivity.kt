@@ -2,7 +2,7 @@ package app.ijoic.ktx.autosize
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import app.ijoic.ktx.R
 import app.ijoic.ktx.autosize.ui.mode.AutoSizeNoneActivity
 import app.ijoic.ktx.autosize.ui.mode.AutoSizeResetActivity

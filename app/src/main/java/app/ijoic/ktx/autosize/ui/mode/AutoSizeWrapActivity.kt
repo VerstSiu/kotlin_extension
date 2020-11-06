@@ -1,7 +1,7 @@
 package app.ijoic.ktx.autosize.ui.mode
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import app.ijoic.ktx.R
 import com.ijoic.ktx.util.AsyncLooper
 import kotlinx.android.synthetic.main.act_autosize_wrap.*

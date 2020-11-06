@@ -21,7 +21,7 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.RectF
 import android.os.Build
-import android.support.annotation.RequiresApi
+import androidx.annotation.RequiresApi
 import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextDirectionHeuristics
